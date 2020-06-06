@@ -1,0 +1,41 @@
+body{
+    width: 800px;
+    margin: 50px auto;
+}
+.title{
+    font-size: 25px;
+    width: 100%;
+    font-weight: bold;
+    text-align: center;
+}
+.main>div{
+    margin-bottom: 20px;
+}
+.main>div>div:nth-child(1){
+    width: 100%;
+    font-size: 20px;
+    border-bottom: 2px solid black;
+    height: 30px;
+    line-height: 30px;
+}
+.a{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: repeat(4,20px);
+    row-gap: 10px;
+    font-size: 16px;
+    color: #008c8c;
+}
+.a>div{
+    padding-left: 50px;
+}
+.a>div>span:nth-child(1){
+    width: 50px;
+    display: inline-block;
+}
+.b{
+    font-size: 16px;
+}
+.b>p{
+    margin-bottom: 10px;
+}
