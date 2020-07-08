@@ -39,3 +39,25 @@ body{
 .b>p{
     margin-bottom: 10px;
 }
+.d{
+    margin-bottom: 20px;
+}
+.d>p{
+    margin-bottom: 15px;
+}
+.d>h2{
+    margin-bottom: 10px;
+    color: #008c8c;
+}
+.img{
+    width: 800px;
+}
+.img>img{
+    width: 390px;
+}
+.img1>img{
+ width: 150px;
+}
+footer{
+    border-top: 1px dashed black;
+}
