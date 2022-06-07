@@ -1,1 +1,165 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Document</title><link rel="icon" href="./favicon.ico"/><script defer="defer" src="./js/8.b8dbc1.js"></script><script defer="defer" src="./js/main.b8dbc1.js"></script><link href="css/main.b8dbc1.css" rel="stylesheet"></head><body><div id="app"></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>数字滚动变化动画</title>
+	</head>
+	<style>
+		/* 滚动变化相关 */
+		.valScrollAmt-box {
+			display: flex;
+			height: 28px;
+			overflow: hidden;
+			font-size: 20px;
+			font-weight: bold;
+		}
+		.digit-container {
+			display: flex;
+			flex-direction: column;
+			line-height: 28px;
+		}
+
+		/* 动态变化 */
+		.valChangeAmt-box {
+			font-size: 20px;
+			font-weight: bold;
+			line-height: 28px;
+		}
+	</style>
+	<body>
+		<h1>滚动式变化</h1>
+		<div id="valScrollAmt" class="valScrollAmt-box"></div>
+		<h1>动态变化</h1>
+		<div id="valChangeAmt" class="valChangeAmt-box">0</div>
+	</body>
+	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+	<script>
+		// 滚动式变化
+		class animateObj {
+			constructor(id, startNum, step, time) {
+				this.id = id; //容器唯一标识
+				this.startNum = startNum; // 初始数值
+				this.savePositionArr = []; //存放旧数据的位置数组
+			}
+
+			// 数字转成数组
+			number2Arr(digit) {
+				var num_arr = [];
+				for (var i = 0; i < digit.length; i++) {
+					num_arr.push(digit.charAt(i));
+				}
+				return num_arr;
+			}
+
+			// dom构建
+			amtDom(arr) {
+				var str = "";
+				for (var i = 0; i < arr.length; i++) {
+					if (parseInt(arr[i]) >= 0) {
+						str +=
+							'<div class="scrollItem digit-container" data-show=' +
+							arr[i] +
+							">\
+                            <span>0</span>\
+                            <span>1</span>\
+                            <span>2</span>\
+                            <span>3</span>\
+                            <span>4</span>\
+                            <span>5</span>\
+                            <span>6</span>\
+                            <span>7</span>\
+                            <span>8</span>\
+                            <span>9</span>\
+                        </div>";
+					} else {
+						str += '<div class="sign-box"><span>' + arr[i] + "</span></div>";
+					}
+				}
+				return str;
+			}
+
+			// 将数字转换为逗号隔开的千分位格式
+			num2qfw(num) {
+				num += "";
+				if (!num.includes(".")) num += ".";
+				return num
+					.replace(/(\d)(?=(\d{3})+\.)/g, function ($0, $1) {
+						return $1 + ",";
+					})
+					.replace(/\.$/, "");
+			}
+
+			animation() {
+				const _this = this;
+				var height = $("#" + this.id).height();
+				$(".scrollItem").each(function (i) {
+					let scrollTopOld, scrollTopNew;
+					let num = parseInt($(this).data("show"));
+					scrollTopNew = height * num;
+					if (!_this.savePositionArr[i]) {
+						_this.savePositionArr[i] = 0;
+					}
+					scrollTopOld = _this.savePositionArr[i];
+					$(this).css("margin-top", -scrollTopOld);
+					if (scrollTopOld != scrollTopNew) {
+						$(this).animate({ marginTop: -scrollTopNew }, 1500);
+					}
+
+					_this.savePositionArr[i] = scrollTopNew;
+				});
+			}
+
+			init() {
+        // 使用分隔符号
+				const _sNum = this.num2qfw(this.startNum);
+        // 转化为数组
+				const numArr = this.number2Arr(_sNum);
+				$("#" + this.id).html(this.amtDom(numArr));
+				this.animation();
+			}
+		}
+		let animate = new animateObj("valScrollAmt", 1000000000);
+		animate.init();
+		setInterval(function () {
+			animate.startNum += 3;
+			animate.init();
+		}, 4000);
+
+		// 动态变化
+		// 将数字转换为逗号隔开的千分位格式
+		function num2qfw(num) {
+			num += "";
+			if (!num.includes(".")) num += ".";
+			return num
+				.replace(/(\d)(?=(\d{3})+\.)/g, function ($0, $1) {
+					return $1 + ",";
+				})
+				.replace(/\.$/, "");
+		}
+
+		// 数值改变动画函数
+		function magic_number(value) {
+			var num = $("#valChangeAmt");
+			num.animate(
+				{ count: value },
+				{
+					duration: 500,
+					step: function () {
+						num.text(num2qfw(parseInt(this.count)));
+					},
+					complete: function () {
+						num.text(num2qfw(parseInt(value)));
+					},
+				}
+			);
+		}
+		let oldVal = 9374401;
+		function update() {
+			magic_number(oldVal);
+			oldVal += Math.random() * 100;
+		}
+		update();
+		setInterval(update, 3000); //3秒钟执行一次 update();
+	</script>
+</html>
